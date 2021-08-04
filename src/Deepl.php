@@ -68,6 +68,10 @@ class Deepl
             throw new Exception("Translated models must implement the 'Astrotomic\Translatable\Contracts\Translatable' Contract.");
         }
 
+        if (! $model[$attr]) {
+            return;
+        }
+
         $model->update([
             $target_lang => [
                 $attr => $this->translate($model[$attr], $target_lang, $source_language),
