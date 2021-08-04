@@ -37,6 +37,9 @@ class Deepl
         $translationArray = [];
 
         foreach ($translatedAttributes as $attribute) {
+            if (! $model[$attribute]) {
+                continue;
+            }
             $translationArray[$attribute] = $this->translate($model[$attribute], $target_lang, $source_language);
         }
 
