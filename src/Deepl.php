@@ -4,12 +4,16 @@ namespace AwStudio\Deeplable;
 
 use Astrotomic\Translatable\Contracts\Translatable;
 use Exception;
+use Illuminate\Database\Eloquent\InvalidCastException;
+use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\LazyLoadingViolationException;
+use LogicException;
 
 class Deepl
 {
     /**
-     * Translate a model for a target language.
+     * Translate a model to a target language.
      *
      * @param  Model                         $model
      * @param  string                        $target_lang
@@ -38,6 +42,33 @@ class Deepl
 
         $model->update([
             $target_lang => $translationArray,
+        ]);
+    }
+
+    /**
+     * Translate a model attribute to a target language.
+     *
+     * @param  Model                         $model
+     * @param  string                        $attr
+     * @param  string                        $target_lang
+     * @param  string|null                   $source_language
+     * @return void
+     * @throws Exception
+     * @throws InvalidCastException
+     * @throws LazyLoadingViolationException
+     * @throws LogicException
+     * @throws MassAssignmentException
+     */
+    public function translateModelAttribute(Model $model, string $attr, string $target_lang, string | null $source_language = null)
+    {
+        if (! $model instanceof Translatable) {
+            throw new Exception("Translated models must implement the 'Astrotomic\Translatable\Contracts\Translatable' Contract.");
+        }
+
+        $model->update([
+            $target_lang => [
+                $attr => $this->translate($model[$attr], $target_lang, $source_language),
+            ],
         ]);
     }
 

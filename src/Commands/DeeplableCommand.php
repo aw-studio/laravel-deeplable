@@ -67,9 +67,23 @@ class DeeplableCommand extends Command
             }
 
             $locales->each(function ($locale) use ($model) {
+                // skip default language
+                if ($locale == config('translatable.fallback_locale')) {
+                    return;
+                }
+                // Generate all "fully" missing translations
                 if (! $model->hasTranslation($locale)) {
                     Deepl::translateModel($model, $locale);
                 }
+                // look for single missing attributes
+                $translatedAttributes = collect($model->getTranslationsArray()[$locale]);
+
+                $translatedAttributes->each(function ($value, $attribute) use ($model, $locale) {
+                    if ($value != '' && $value != '<p></p>') {
+                        return;
+                    }
+                    Deepl::translateModelAttribute($model, $attribute, $locale);
+                });
             });
         });
     }
