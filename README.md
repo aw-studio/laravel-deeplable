@@ -40,7 +40,7 @@ Imagine you have stored the default language ('en') and want to auto-generate th
 ```php
 $post = Post::first();
 
-$post->traslateTo('de'); 
+$post->translateTo('de'); 
 ```
 
 If you want to translate all Models to all locales, simply run the `deeplable` artisan command:
