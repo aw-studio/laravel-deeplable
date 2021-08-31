@@ -16,8 +16,8 @@ class Deepl
      * Translate a model to a target language.
      *
      * @param  Model                         $model
-     * @param  string                        $target_lang
-     * @param  string|null                   $source_language
+     * @param  string                        $targetLang
+     * @param  string|null                   $sourceLanguage
      * @return void
      * @throws InvalidCastException
      * @throws LazyLoadingViolationException
@@ -26,7 +26,7 @@ class Deepl
      * @throws GuzzleException
      * @throws MassAssignmentException
      */
-    public function translateModel(Model $model, string $target_lang, string | null $source_language = null)
+    public function translateModel(Model $model, string $targetLang, string | null $sourceLanguage = null)
     {
         if (! $model instanceof Translatable) {
             throw new Exception("Translated models must implement the 'Astrotomic\Translatable\Contracts\Translatable' Contract.");
@@ -40,11 +40,11 @@ class Deepl
             if (! $model[$attribute]) {
                 continue;
             }
-            $translationArray[$attribute] = $this->translate($model[$attribute], $target_lang, $source_language);
+            $translationArray[$attribute] = $this->translate($model[$attribute], $targetLang, $sourceLanguage);
         }
 
         $model->update([
-            $target_lang => $translationArray,
+            $targetLang => $translationArray,
         ]);
     }
 
@@ -53,8 +53,8 @@ class Deepl
      *
      * @param  Model                         $model
      * @param  string                        $attr
-     * @param  string                        $target_lang
-     * @param  string|null                   $source_language
+     * @param  string                        $targetLang
+     * @param  string|null                   $sourceLanguage
      * @return void
      * @throws Exception
      * @throws InvalidCastException
@@ -62,7 +62,7 @@ class Deepl
      * @throws LogicException
      * @throws MassAssignmentException
      */
-    public function translateModelAttribute(Model $model, string $attr, string $target_lang, string | null $source_language = null)
+    public function translateModelAttribute(Model $model, string $attr, string $targetLang, string | null $sourceLanguage = null)
     {
         if (! $model instanceof Translatable) {
             throw new Exception("Translated models must implement the 'Astrotomic\Translatable\Contracts\Translatable' Contract.");
@@ -73,8 +73,8 @@ class Deepl
         }
 
         $model->update([
-            $target_lang => [
-                $attr => $this->translate($model[$attr], $target_lang, $source_language),
+            $targetLang => [
+                $attr => $this->translate($model[$attr], $targetLang, $sourceLanguage),
             ],
         ]);
     }
@@ -83,20 +83,20 @@ class Deepl
      * Translate a string to a target language with DeepL.
      *
      * @param  string                     $string
-     * @param  string                     $target_lang
-     * @param  string|null                $source_language
+     * @param  string                     $targetLang
+     * @param  string|null                $sourceLanguage
      * @return string
      * @throws BindingResolutionException
      * @throws GuzzleException
      */
-    public function translate(string $string, string $target_lang, string | null $source_language = null): string
+    public function translate(string $string, string $targetLang, string | null $sourceLanguage = null): string
     {
         $endpoint = config('deeplable.api_url');
         $body = [
             'auth_key'        => config('deeplable.api_token'),
             'text'            => strip_tags($string, '<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<p>,<br>,<div>,<span>,<strong>,<b>'),
-            'source_language' => strtoupper($source_language ?: config('translatable.fallback_locale')),
-            'target_lang'     => strtoupper($target_lang),
+            'source_language' => strtoupper($sourceLanguage ?: config('translatable.fallback_locale')),
+            'target_lang'     => strtoupper($targetLang),
         ];
         $client = new \GuzzleHttp\Client();
 
