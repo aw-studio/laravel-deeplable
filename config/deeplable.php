@@ -21,7 +21,7 @@ return [
     | settings.
     |
     */
-    'api_token' => null,
+    'api_token' => env('DEEPL_API_TOKEN', null),
 
     /*
     |--------------------------------------------------------------------------
