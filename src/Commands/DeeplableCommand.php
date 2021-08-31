@@ -2,7 +2,7 @@
 
 namespace AwStudio\Deeplable\Commands;
 
-use AwStudio\Deeplable\Facades\Deepl;
+use AwStudio\Deeplable\Facades\Translator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 
@@ -23,68 +23,51 @@ class DeeplableCommand extends Command
     protected $description = 'Generate missing translations via DeepL.';
 
     /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @return int
      */
     public function handle()
     {
+        $fallbackLocale = config('translatable.fallback_locale');
+        $locales = $this->getLocales();
         $models = config('deeplable.translated_models');
 
         foreach ($models as $model) {
-            $instance = new $model;
-
-            $all = $instance->get();
-
-            $this->translateCollection($all);
+            $this->translateCollection((new $model)->get(), $locales, $fallbackLocale);
         }
+    }
+
+    /**
+     * Get locales that should be translated to.
+     *
+     * @return array
+     */
+    public function getLocales()
+    {
+        return collect($this->argument('locale') ?: config('translatable.locales'))
+            ->filter(fn ($locale) => $locale != config('translatable.fallback_locale'))
+            ->toArray();
     }
 
     /**
      * Translate a collection of models.
      *
      * @param  Collection $models
+     * @param array $locales
+     * @param string $fallbackLocale
      * @return void
      */
-    public function translateCollection(Collection $models): void
+    public function translateCollection(Collection $models, $locales, $fallbackLocale): void
     {
-        $locales = collect($this->argument('locale') ?: config('translatable.locales'));
+        foreach ($models as $model) {
+            $translator = Translator::for($model);
 
-        $models->each(function ($model) use ($locales) {
-            // skip if there is no default translation
-            if (! $model->hasTranslation()) {
-                return;
+            foreach ($locales as $locale) {
+                $translator->translate($model, $locale, $fallbackLocale);
             }
 
-            $locales->each(function ($locale) use ($model) {
-                // skip default language
-                if ($locale == config('translatable.fallback_locale')) {
-                    return;
-                }
-                // Generate all "fully" missing translations
-                if (! $model->hasTranslation($locale)) {
-                    Deepl::translateModel($model, $locale);
-                }
-                // look for single missing attributes
-                $translatedAttributes = collect($model->getTranslationsArray()[$locale]);
-
-                $translatedAttributes->each(function ($value, $attribute) use ($model, $locale) {
-                    if ($value != '' && $value != '<p></p>') {
-                        return;
-                    }
-                    Deepl::translateModelAttribute($model, $attribute, $locale);
-                });
-            });
-        });
+            $model->save();
+        }
     }
 }

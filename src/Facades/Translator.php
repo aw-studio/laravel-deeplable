@@ -4,7 +4,7 @@ namespace AwStudio\Deeplable\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Deepl extends Facade
+class Translator extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -13,6 +13,6 @@ class Deepl extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'deeplable.api';
+        return 'deeplable.translator';
     }
 }
