@@ -2,23 +2,19 @@
 
 namespace Tests;
 
-use Mockery;
-use AwStudio\Deeplable\Deepl;
-use Orchestra\Testbench\TestCase;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model;
-use Astrotomic\Translatable\Translatable;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Testing\AssertableJsonString;
-use AwStudio\Deeplable\Translators\BaseTranslator;
-use Astrotomic\Translatable\TranslatableServiceProvider;
-use AwStudio\Deeplable\Translators\AstrotomicTranslator;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
+use Astrotomic\Translatable\Translatable;
+use AwStudio\Deeplable\Deepl;
 use AwStudio\Deeplable\DeeplableServiceProvider;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Mockery;
+use Orchestra\Testbench\TestCase;
 
 class DeeplableCommandTest extends TestCase
 {
-    public function setUp():void
+    public function setUp(): void
     {
         parent::setUp();
         Schema::create('posts', fn (Blueprint $table) => $table->id());
@@ -50,7 +46,7 @@ class DeeplableCommandTest extends TestCase
         $config->set('deeplable.api_url', '');
         $config->set('deeplable.api_token', '');
         $config->set('deeplable.translated_models', [
-            DummyPost::class
+            DummyPost::class,
         ]);
         $config->set('translatable.fallback_locale', 'en');
         $config->set('translatable.locales', [

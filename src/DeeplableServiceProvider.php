@@ -2,13 +2,12 @@
 
 namespace AwStudio\Deeplable;
 
-use AwStudio\Deeplable\Deepl;
+use Astrotomic\Translatable\Contracts\Translatable;
+use AwStudio\Deeplable\Commands\DeeplableCommand;
+use AwStudio\Deeplable\Translators\AstrotomicTranslator;
+use AwStudio\Deeplable\Translators\Resolver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use AwStudio\Deeplable\Translators\Resolver;
-use AwStudio\Deeplable\Commands\DeeplableCommand;
-use Astrotomic\Translatable\Contracts\Translatable;
-use AwStudio\Deeplable\Translators\AstrotomicTranslator;
 
 class DeeplableServiceProvider extends ServiceProvider
 {

@@ -4,7 +4,6 @@ namespace AwStudio\Deeplable\Translators;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use AwStudio\Deeplable\Translators\BaseTranslator;
 
 class Resolver
 {

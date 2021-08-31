@@ -2,10 +2,9 @@
 
 namespace AwStudio\Deeplable\Commands;
 
+use AwStudio\Deeplable\Facades\Translator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Model;
-use AwStudio\Deeplable\Facades\Translator;
 
 class DeeplableCommand extends Command
 {

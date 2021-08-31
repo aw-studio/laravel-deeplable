@@ -41,8 +41,8 @@ class Deepl
     public function translate(string $string, string $targetLang, string | null $sourceLanguage = null): string
     {
         // Avoid translating empty strings.
-        if (!$string) {
-            return "";
+        if (! $string) {
+            return '';
         }
 
         $body = [
@@ -53,7 +53,7 @@ class Deepl
         ];
 
         $content = $this->apiCall('POST', 'translate', [
-            'query' => $body
+            'query' => $body,
         ]);
 
         $translation = $content['translations'][0]['text'];
@@ -73,7 +73,7 @@ class Deepl
     {
         $response = $this->client->request(
             $method,
-            $this->apiUrl."/".$action,
+            $this->apiUrl.'/'.$action,
             $params
         );
 

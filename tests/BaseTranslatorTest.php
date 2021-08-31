@@ -3,11 +3,11 @@
 namespace Tests;
 
 use AwStudio\Deeplable\Deepl;
-use Mockery;
-use PHPUnit\Framework\TestCase;
+use AwStudio\Deeplable\Translators\BaseTranslator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Testing\AssertableJsonString;
-use AwStudio\Deeplable\Translators\BaseTranslator;
+use Mockery;
+use PHPUnit\Framework\TestCase;
 
 class BaseTranslatorTest extends TestCase
 {
@@ -30,12 +30,12 @@ class BaseTranslatorTest extends TestCase
         $translator->calledParams[0]->assertFragment([
             'attribute' => 'title',
             'locale' => 'de',
-            'translation' => 'bar'
+            'translation' => 'bar',
         ]);
         $translator->calledParams[1]->assertFragment([
             'attribute' => 'text',
             'locale' => 'de',
-            'translation' => 'bar'
+            'translation' => 'bar',
         ]);
     }
 
@@ -43,7 +43,7 @@ class BaseTranslatorTest extends TestCase
     {
         $api = Mockery::mock(Deepl::class);
         $api->shouldReceive('translate')->once()->withArgs([
-            'foo', 'de', 'en'
+            'foo', 'de', 'en',
         ]);
         $post = Mockery::mock(Model::class);
         $post->shouldReceive('getAttribute')->withArgs(['title'])->andReturn('foo');
@@ -65,11 +65,11 @@ class DummyTranslatorMock extends BaseTranslator
     protected function translateAttribute(Model $model, $attribute, $locale, $translation)
     {
         $this->calledTimes++;
-        $this->calledParams []= new AssertableJsonString([
+        $this->calledParams [] = new AssertableJsonString([
             'model' => $model,
             'attribute' => $attribute,
             'locale' => $locale,
-            'translation' => $translation
+            'translation' => $translation,
         ]);
     }
 }
