@@ -29,7 +29,7 @@ class DeeplableServiceProvider extends ServiceProvider
         $this->registerCommands();
 
         $this->publishes([
-            __DIR__ . '/../config/deeplable.php' => config_path('deeplable.php'),
+            __DIR__.'/../config/deeplable.php' => config_path('deeplable.php'),
         ], 'deeplable');
     }
 
