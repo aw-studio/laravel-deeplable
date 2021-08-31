@@ -10,7 +10,7 @@ return [
     | to DeepL.
     |
     */
-    'api_url' => 'https://api-free.deepl.com/v2/translate',
+    'api_url' => 'https://api-free.deepl.com/v2',
 
     /*
     |--------------------------------------------------------------------------

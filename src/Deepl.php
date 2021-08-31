@@ -2,81 +2,32 @@
 
 namespace AwStudio\Deeplable;
 
-use Astrotomic\Translatable\Contracts\Translatable;
-use Exception;
-use Illuminate\Database\Eloquent\InvalidCastException;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\LazyLoadingViolationException;
-use LogicException;
+use GuzzleHttp\Client;
 
+/**
+ * DeepL V2 Api adapter.
+ */
 class Deepl
 {
     /**
-     * Translate a model to a target language.
+     * Guzzle http client.
      *
-     * @param  Model                         $model
-     * @param  string                        $targetLang
-     * @param  string|null                   $sourceLanguage
-     * @return void
-     * @throws InvalidCastException
-     * @throws LazyLoadingViolationException
-     * @throws LogicException
-     * @throws BindingResolutionException
-     * @throws GuzzleException
-     * @throws MassAssignmentException
+     * @var Client
      */
-    public function translateModel(Model $model, string $targetLang, string | null $sourceLanguage = null)
-    {
-        if (! $model instanceof Translatable) {
-            throw new Exception("Translated models must implement the 'Astrotomic\Translatable\Contracts\Translatable' Contract.");
-        }
-
-        $translatedAttributes = collect($model->translatedAttributes);
-
-        $translationArray = [];
-
-        foreach ($translatedAttributes as $attribute) {
-            if (! $model[$attribute]) {
-                continue;
-            }
-            $translationArray[$attribute] = $this->translate($model[$attribute], $targetLang, $sourceLanguage);
-        }
-
-        $model->update([
-            $targetLang => $translationArray,
-        ]);
-    }
+    protected Client $client;
 
     /**
-     * Translate a model attribute to a target language.
+     * Create new Deepl instance.
      *
-     * @param  Model                         $model
-     * @param  string                        $attr
-     * @param  string                        $targetLang
-     * @param  string|null                   $sourceLanguage
+     * @param string $apiToken
      * @return void
-     * @throws Exception
-     * @throws InvalidCastException
-     * @throws LazyLoadingViolationException
-     * @throws LogicException
-     * @throws MassAssignmentException
      */
-    public function translateModelAttribute(Model $model, string $attr, string $targetLang, string | null $sourceLanguage = null)
-    {
-        if (! $model instanceof Translatable) {
-            throw new Exception("Translated models must implement the 'Astrotomic\Translatable\Contracts\Translatable' Contract.");
-        }
-
-        if (! $model[$attr]) {
-            return;
-        }
-
-        $model->update([
-            $targetLang => [
-                $attr => $this->translate($model[$attr], $targetLang, $sourceLanguage),
-            ],
-        ]);
+    public function __construct(
+        protected string $apiToken,
+        protected string $apiUrl = 'https://api-free.deepl.com/v2/translate',
+        protected string $fallbackLocale = 'en'
+    ) {
+        $this->client = new Client();
     }
 
     /**
@@ -86,26 +37,46 @@ class Deepl
      * @param  string                     $targetLang
      * @param  string|null                $sourceLanguage
      * @return string
-     * @throws BindingResolutionException
-     * @throws GuzzleException
      */
     public function translate(string $string, string $targetLang, string | null $sourceLanguage = null): string
     {
-        $endpoint = config('deeplable.api_url');
+        // Avoid translating empty strings.
+        if (!$string) {
+            return "";
+        }
+
         $body = [
-            'auth_key'        => config('deeplable.api_token'),
+            'auth_key'        => $this->apiToken,
             'text'            => strip_tags($string, '<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<p>,<br>,<div>,<span>,<strong>,<b>'),
-            'source_language' => strtoupper($sourceLanguage ?: config('translatable.fallback_locale')),
+            'source_language' => strtoupper($sourceLanguage ?: $this->fallbackLocale),
             'target_lang'     => strtoupper($targetLang),
         ];
-        $client = new \GuzzleHttp\Client();
 
-        $response = $client->request('POST', $endpoint, ['query' => $body]);
-
-        $content = json_decode($response->getBody(), true);
+        $content = $this->apiCall('POST', 'translate', [
+            'query' => $body
+        ]);
 
         $translation = $content['translations'][0]['text'];
 
         return $translation;
+    }
+
+    /**
+     * Send a deepl api call.
+     *
+     * @param string $method
+     * @param string $action
+     * @param array $params
+     * @return array
+     */
+    protected function apiCall($method, $action, $params = []): array
+    {
+        $response = $this->client->request(
+            $method,
+            $this->apiUrl."/".$action,
+            $params
+        );
+
+        return json_decode($response->getBody(), true);
     }
 }
