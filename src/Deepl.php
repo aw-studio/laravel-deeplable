@@ -47,7 +47,7 @@ class Deepl
 
         $body = [
             'auth_key'        => $this->apiToken,
-            'text'            => strip_tags($string, '<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<p>,<br>,<div>,<span>,<strong>,<b>'),
+            'text'            => strip_tags($string, '<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<p>,<br>,<div>,<span>,<strong>,<b>,<a>'),
             'source_language' => strtoupper($sourceLanguage ?: $this->fallbackLocale),
             'target_lang'     => strtoupper($targetLang),
         ];
