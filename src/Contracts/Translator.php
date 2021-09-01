@@ -13,9 +13,10 @@ interface Translator
      * @param array $attributes
      * @param  string                        $targetLang
      * @param  string|null                   $sourceLanguage
+     * @param bool $force
      * @return void
      */
-    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null);
+    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null, bool $force = true);
 
     /**
      * Translate a list of attributes.
@@ -24,7 +25,8 @@ interface Translator
      * @param array $attributes
      * @param  string                        $targetLang
      * @param  string|null                   $sourceLanguage
+     * @param bool $force
      * @return void
      */
-    public function translateAttributes(Model $model, array $attributes, string $targetLang, string | null $sourceLanguage = null);
+    public function translateAttributes(Model $model, array $attributes, string $targetLang, string | null $sourceLanguage = null, bool $force = true);
 }

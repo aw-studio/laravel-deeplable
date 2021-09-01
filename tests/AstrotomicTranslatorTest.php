@@ -25,6 +25,15 @@ class AstrotomicTranslatorTest extends TestCase
         ];
     }
 
+    protected function getEnvironmentSetUp($app)
+    {
+        $config = $app['config'];
+        $config->set('translatable.fallback_locale', 'en');
+        $config->set('translatable.locales', [
+            'en', 'de',
+        ]);
+    }
+
     public function testItTranslatesModelAttributes()
     {
         $api = Mockery::mock(Deepl::class);
@@ -33,9 +42,22 @@ class AstrotomicTranslatorTest extends TestCase
 
         $post = new DummyTranslatablePost([
             'en' => ['title' => 'Hello World'],
+            'de' => ['title' => 'Foo'],
         ]);
 
         $translator->translateAttributes($post, ['title'], 'de', 'en');
+
+        $this->app->setLocale('de');
+        $this->assertSame($post->title, 'Hallo Welt');
+
+        $this->app->setLocale('en');
+
+        $post = new DummyTranslatablePost([
+            'en' => ['title' => 'Hello World'],
+            'de' => ['title' => 'Foo'],
+        ]);
+
+        $translator->translate($post, 'de', 'en');
 
         $this->app->setLocale('de');
         $this->assertSame($post->title, 'Hallo Welt');
@@ -52,6 +74,31 @@ class AstrotomicTranslatorTest extends TestCase
         ]);
 
         $this->assertEquals(['title'], $translator->getTranslatedAttributes($post, 'en'));
+    }
+
+    public function testAttributesAreNotOverritenWhenForceIsFalse()
+    {
+        $api = Mockery::mock(Deepl::class);
+        $api->shouldReceive('translate')->andReturn('Hallo Welt');
+        $translator = new AstrotomicTranslator($api);
+
+        $post = new DummyTranslatablePost([
+            'en' => ['title' => 'Hello World'],
+            'de' => ['title' => 'Foo'],
+        ]);
+        $translator->translateAttributes($post, ['title'], 'de', 'en', false);
+
+        $this->app->setLocale('de');
+        $this->assertSame($post->title, 'Foo');
+
+        $this->app->setLocale('en');
+        $post = new DummyTranslatablePost([
+            'en' => ['title' => 'Hello World'],
+            'de' => ['title' => 'Foo'],
+        ]);
+        $translator->translate($post, 'de', 'en', false);
+        $this->app->setLocale('de');
+        $this->assertSame($post->title, 'Foo');
     }
 }
 

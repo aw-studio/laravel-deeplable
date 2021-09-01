@@ -62,7 +62,7 @@ class DummyTranslatorMock extends BaseTranslator
         return ['title', 'text'];
     }
 
-    protected function translateAttribute(Model $model, $attribute, $locale, $translation)
+    protected function translateAttribute(Model $model, $attribute, $locale, $translation, bool $force = true)
     {
         $this->calledTimes++;
         $this->calledParams [] = new AssertableJsonString([

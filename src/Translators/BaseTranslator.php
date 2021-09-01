@@ -17,7 +17,7 @@ abstract class BaseTranslator implements Translator
      * @param string $translation
      * @return void
      */
-    abstract protected function translateAttribute(Model $model, $attribute, $locale, $translation);
+    abstract protected function translateAttribute(Model $model, $attribute, $locale, $translation, bool $force = true);
 
     /**
      * Get a list of the translated attributes of a model.
@@ -49,7 +49,7 @@ abstract class BaseTranslator implements Translator
      * @param  string|null                   $sourceLanguage
      * @return void
      */
-    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null)
+    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
     {
         $translatedAttributes = $this->getTranslatedAttributes($model, $sourceLanguage);
 
@@ -61,7 +61,8 @@ abstract class BaseTranslator implements Translator
             $model,
             $translatedAttributes,
             $targetLang,
-            $sourceLanguage
+            $sourceLanguage,
+            $force
         );
     }
 
@@ -74,7 +75,7 @@ abstract class BaseTranslator implements Translator
      * @param  string|null                   $sourceLanguage
      * @return void
      */
-    public function translateAttributes(Model $model, array $attributes, string $targetLang, string | null $sourceLanguage = null)
+    public function translateAttributes(Model $model, array $attributes, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
     {
         foreach ($attributes as $attribute) {
             $translation = $this->api->translate(
@@ -83,7 +84,7 @@ abstract class BaseTranslator implements Translator
                 $sourceLanguage
             );
 
-            $this->translateAttribute($model, $attribute, $targetLang, $translation);
+            $this->translateAttribute($model, $attribute, $targetLang, $translation, $force);
         }
     }
 }

@@ -5,15 +5,17 @@ namespace AwStudio\Deeplable\Commands;
 use AwStudio\Deeplable\Facades\Translator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class DeeplableCommand extends Command
 {
     /**
-     * The name and signature of the console command.
+     * The console command name.
      *
      * @var string
      */
-    protected $signature = 'deeplable:run {locale?}';
+    protected $name = 'deeplable:run';
 
     /**
      * The console command description.
@@ -21,6 +23,30 @@ class DeeplableCommand extends Command
      * @var string
      */
     protected $description = 'Generate missing translations via DeepL.';
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['locale', InputArgument::OPTIONAL, 'The locale of the language to translate to'],
+        ];
+    }
+
+    /**
+     * Get the console command options.
+     *
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['force', null, InputOption::VALUE_NONE, 'Whether existing records are to be overwritten', null],
+        ];
+    }
 
     /**
      * Execute the console command.
@@ -60,11 +86,13 @@ class DeeplableCommand extends Command
      */
     public function translateCollection(Collection $models, $locales, $fallbackLocale): void
     {
+        $force = $this->hasOption('force') && $this->option('force');
+
         foreach ($models as $model) {
             $translator = Translator::for($model);
 
             foreach ($locales as $locale) {
-                $translator->translate($model, $locale, $fallbackLocale);
+                $translator->translate($model, $locale, $fallbackLocale, $force);
             }
 
             $model->save();
