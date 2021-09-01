@@ -4,6 +4,9 @@ namespace AwStudio\Deeplable\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @method static string translate(stirng $string, string $targetLang, string | null $sourceLanguage = null)
+ */
 class Deepl extends Facade
 {
     /**

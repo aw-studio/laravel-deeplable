@@ -4,6 +4,7 @@ namespace AwStudio\Deeplable\Translators;
 
 use Closure;
 use Illuminate\Database\Eloquent\Model;
+use AwStudio\Deeplable\Contracts\Translator;
 
 class Resolver
 {
@@ -24,20 +25,20 @@ class Resolver
     /**
      * Register a translator resolver.
      *
-     * @param string $abstract
+     * @param string $alias
      * @param Closure $resolver
      * @return void
      */
-    public function register($abstract, Closure $resolver)
+    public function register($alias, Closure $resolver)
     {
-        $this->resolvers[$abstract] = $resolver;
+        $this->resolvers[$alias] = $resolver;
     }
 
     /**
      * Get a translator.
      *
      * @param string $alias
-     * @return BaseTranslator|null
+     * @return Translator|null
      */
     public function get($alias)
     {
@@ -56,7 +57,7 @@ class Resolver
      * Get translator for the given model.
      *
      * @param Model $model
-     * @return void
+     * @return Translator|null
      */
     public function for(Model $model)
     {
@@ -66,7 +67,7 @@ class Resolver
     }
 
     /**
-     * Set strategy.
+     * Set translation strategy.
      *
      * @param Closure $closure
      * @return void

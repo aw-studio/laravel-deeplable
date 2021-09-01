@@ -2,7 +2,7 @@
 
 namespace AwStudio\Deeplable\Traits;
 
-use AwStudio\Deeplable\Facades\Deepl;
+use AwStudio\Deeplable\Facades\Translator;
 
 trait Deeplable
 {
@@ -15,7 +15,9 @@ trait Deeplable
      */
     public function translateTo(string $targetLang, string | null $sourceLanguage = null)
     {
-        Deepl::translateModel($this, $targetLang, $sourceLanguage);
+        Translator::for($this)->translate($this, $targetLang, $sourceLanguage);
+        
+        $this->save();
     }
 
     /**
@@ -26,8 +28,23 @@ trait Deeplable
      * @param  string|null $sourceLanguage
      * @return void
      */
-    public function translateAttribute(string $attr, string $targetLang, string | null $sourceLanguage = null)
+    public function translateAttributeTo(string $attr, string $targetLang, string | null $sourceLanguage = null)
     {
-        Deepl::translateModelAttribute($this, $attr, $targetLang, $sourceLanguage);
+        $this->translateAttributesTo([$attr], $targetLang, $sourceLanguage);
+    }
+
+    /**
+     * Translate multiple model attributes to a target language.
+     *
+     * @param  string      $attr
+     * @param  string      $targetLang
+     * @param  string|null $sourceLanguage
+     * @return void
+     */
+    public function translateAttributesTo(array $attributes, string $targetLang, string | null $sourceLanguage = null)
+    {
+        Translator::for($this)->translateAttributes($this, $attributes, $targetLang, $sourceLanguage);
+
+        $this->save();
     }
 }
