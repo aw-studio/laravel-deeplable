@@ -2,11 +2,11 @@
 
 namespace AwStudio\Deeplable\Commands;
 
+use AwStudio\Deeplable\Facades\Translator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
-use AwStudio\Deeplable\Facades\Translator;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class DeeplableCommand extends Command
 {

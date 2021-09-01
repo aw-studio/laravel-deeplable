@@ -92,11 +92,11 @@ class DeeplableCommandTest extends TestCase
 
         DummyPost::create([
             'en' => ['title' => 'foo'],
-            'de' => ['title' => 'baz']
+            'de' => ['title' => 'baz'],
         ]);
         DummyPost::create([
             'en' => ['title' => 'foo'],
-            'de' => ['title' => 'baz']
+            'de' => ['title' => 'baz'],
         ]);
 
         // Assuming force is disabled by default.
