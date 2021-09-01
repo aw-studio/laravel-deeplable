@@ -2,9 +2,9 @@
 
 namespace AwStudio\Deeplable\Facades;
 
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Database\Eloquent\Model;
 use AwStudio\Deeplable\Contracts\Translator as TranslatorContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static void register(string $alias, \Closure $resolver)

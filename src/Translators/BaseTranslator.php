@@ -2,9 +2,9 @@
 
 namespace AwStudio\Deeplable\Translators;
 
+use AwStudio\Deeplable\Contracts\Translator;
 use AwStudio\Deeplable\Deepl;
 use Illuminate\Database\Eloquent\Model;
-use AwStudio\Deeplable\Contracts\Translator;
 
 abstract class BaseTranslator implements Translator
 {

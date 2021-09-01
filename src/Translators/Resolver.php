@@ -2,9 +2,9 @@
 
 namespace AwStudio\Deeplable\Translators;
 
+use AwStudio\Deeplable\Contracts\Translator;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
-use AwStudio\Deeplable\Contracts\Translator;
 
 class Resolver
 {

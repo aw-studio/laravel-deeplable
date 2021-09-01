@@ -16,7 +16,7 @@ trait Deeplable
     public function translateTo(string $targetLang, string | null $sourceLanguage = null)
     {
         Translator::for($this)->translate($this, $targetLang, $sourceLanguage);
-        
+
         $this->save();
     }
 
