@@ -11,11 +11,12 @@ trait Deeplable
      *
      * @param  string      $targetLang
      * @param  string|null $sourceLanguage
+     * @param bool $force
      * @return void
      */
-    public function translateTo(string $targetLang, string | null $sourceLanguage = null)
+    public function translateTo(string $targetLang, string | null $sourceLanguage = null, bool $force = true)
     {
-        Translator::for($this)->translate($this, $targetLang, $sourceLanguage);
+        Translator::for($this)->translate($this, $targetLang, $sourceLanguage, $force);
 
         $this->save();
     }
@@ -26,11 +27,12 @@ trait Deeplable
      * @param  string      $attr
      * @param  string      $targetLang
      * @param  string|null $sourceLanguage
+     * @param bool $force
      * @return void
      */
-    public function translateAttributeTo(string $attr, string $targetLang, string | null $sourceLanguage = null)
+    public function translateAttributeTo(string $attr, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
     {
-        $this->translateAttributesTo([$attr], $targetLang, $sourceLanguage);
+        $this->translateAttributesTo([$attr], $targetLang, $sourceLanguage, $force);
     }
 
     /**
@@ -39,9 +41,10 @@ trait Deeplable
      * @param  string      $attr
      * @param  string      $targetLang
      * @param  string|null $sourceLanguage
+     * @param bool $force
      * @return void
      */
-    public function translateAttributesTo(array $attributes, string $targetLang, string | null $sourceLanguage = null)
+    public function translateAttributesTo(array $attributes, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
     {
         Translator::for($this)->translateAttributes($this, $attributes, $targetLang, $sourceLanguage);
 

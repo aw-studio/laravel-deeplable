@@ -13,11 +13,19 @@ class AstrotomicTranslator extends BaseTranslator
      * @param string $attribute
      * @param string $locale
      * @param string $translation
+     * @param bool $force
      * @return void
      */
-    protected function translateAttribute(Model $model, $attribute, $locale, $translation)
+    protected function translateAttribute(Model $model, $attribute, $locale, $translation, bool $force = true)
     {
-        $model->translateOrNew($locale)->setAttribute($attribute, $translation);
+        $translationModel = $model->translateOrNew($locale);
+
+        // Ignore attribute when it has a value and it should not be overriten.
+        if (! $force && $translationModel->getAttribute($attribute)) {
+            return;
+        }
+
+        $translationModel->setAttribute($attribute, $translation);
     }
 
     /**
@@ -39,14 +47,15 @@ class AstrotomicTranslator extends BaseTranslator
      * @param array $attributes
      * @param  string                        $targetLang
      * @param  string|null                   $sourceLanguage
+     * @param bool $force
      * @return void
      */
-    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null)
+    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
     {
         if (! $model->hasTranslation($sourceLanguage)) {
             return;
         }
 
-        return parent::translate($model, $targetLang, $sourceLanguage);
+        return parent::translate($model, $targetLang, $sourceLanguage, $force);
     }
 }
