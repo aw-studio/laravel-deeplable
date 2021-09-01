@@ -24,7 +24,7 @@ class Deepl
      */
     public function __construct(
         protected string $apiToken,
-        protected string $apiUrl = 'https://api-free.deepl.com/v2/translate',
+        protected string $apiUrl = 'https://api-free.deepl.com/v2',
         protected string $fallbackLocale = 'en'
     ) {
         $this->client = new Client();
