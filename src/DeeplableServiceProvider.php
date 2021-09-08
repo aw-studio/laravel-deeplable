@@ -62,10 +62,8 @@ class DeeplableServiceProvider extends ServiceProvider
      */
     public function registerCommands(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                DeeplableCommand::class,
-            ]);
-        }
+        $this->commands([
+            DeeplableCommand::class,
+        ]);
     }
 }
