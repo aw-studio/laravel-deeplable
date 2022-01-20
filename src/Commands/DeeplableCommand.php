@@ -2,13 +2,13 @@
 
 namespace AwStudio\Deeplable\Commands;
 
-use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
-use GuzzleHttp\Exception\GuzzleException;
 use AwStudio\Deeplable\Facades\Translator;
 use AwStudio\Deeplable\Jobs\TranslateModelJob;
-use Symfony\Component\Console\Input\InputOption;
+use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class DeeplableCommand extends Command
 {
@@ -82,9 +82,9 @@ class DeeplableCommand extends Command
     /**
      * Translate a collection of models.
      *
-     * @param  Collection $models
-     * @param  array      $locales
-     * @param  string     $fallbackLocale
+     * @param  Collection  $models
+     * @param  array  $locales
+     * @param  string  $fallbackLocale
      * @return void
      */
     public function translateCollection(Collection $models, $locales, $fallbackLocale): void
