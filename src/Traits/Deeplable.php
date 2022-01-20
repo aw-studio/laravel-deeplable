@@ -9,12 +9,12 @@ trait Deeplable
     /**
      * Translate the model to a target language.
      *
-     * @param  string      $targetLang
-     * @param  string|null $sourceLanguage
-     * @param bool $force
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
+     * @param  bool  $force
      * @return void
      */
-    public function translateTo(string $targetLang, string | null $sourceLanguage = null, bool $force = true)
+    public function translateTo(string $targetLang, string|null $sourceLanguage = null, bool $force = true)
     {
         Translator::for($this)->translate($this, $targetLang, $sourceLanguage, $force);
 
@@ -24,13 +24,13 @@ trait Deeplable
     /**
      * Translate a model attribute to a target language.
      *
-     * @param  string      $attr
-     * @param  string      $targetLang
-     * @param  string|null $sourceLanguage
-     * @param bool $force
+     * @param  string  $attr
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
+     * @param  bool  $force
      * @return void
      */
-    public function translateAttributeTo(string $attr, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
+    public function translateAttributeTo(string $attr, string $targetLang, string|null $sourceLanguage = null, bool $force = true)
     {
         $this->translateAttributesTo([$attr], $targetLang, $sourceLanguage, $force);
     }
@@ -38,13 +38,13 @@ trait Deeplable
     /**
      * Translate multiple model attributes to a target language.
      *
-     * @param  string      $attr
-     * @param  string      $targetLang
-     * @param  string|null $sourceLanguage
-     * @param bool $force
+     * @param  string  $attr
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
+     * @param  bool  $force
      * @return void
      */
-    public function translateAttributesTo(array $attributes, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
+    public function translateAttributesTo(array $attributes, string $targetLang, string|null $sourceLanguage = null, bool $force = true)
     {
         Translator::for($this)->translateAttributes($this, $attributes, $targetLang, $sourceLanguage);
 

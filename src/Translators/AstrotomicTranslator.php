@@ -9,11 +9,11 @@ class AstrotomicTranslator extends BaseTranslator
     /**
      * Translate the given model attribute.
      *
-     * @param Model $model
-     * @param string $attribute
-     * @param string $locale
-     * @param string $translation
-     * @param bool $force
+     * @param  Model  $model
+     * @param  string  $attribute
+     * @param  string  $locale
+     * @param  string  $translation
+     * @param  bool  $force
      * @return void
      */
     protected function translateAttribute(Model $model, $attribute, $locale, $translation, bool $force = true)
@@ -31,8 +31,8 @@ class AstrotomicTranslator extends BaseTranslator
     /**
      * Get a list of the translated attributes of a model.
      *
-     * @param Model $model
-     * @param string $locale
+     * @param  Model  $model
+     * @param  string  $locale
      * @return array
      */
     public function getTranslatedAttributes(Model $model, $locale)
@@ -43,14 +43,14 @@ class AstrotomicTranslator extends BaseTranslator
     /**
      * Translate all translated attributes of a model.
      *
-     * @param Model $model
-     * @param array $attributes
-     * @param  string                        $targetLang
-     * @param  string|null                   $sourceLanguage
-     * @param bool $force
+     * @param  Model  $model
+     * @param  array  $attributes
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
+     * @param  bool  $force
      * @return void
      */
-    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
+    public function translate(Model $model, string $targetLang, string|null $sourceLanguage = null, bool $force = true)
     {
         if (! $model->hasTranslation($sourceLanguage)) {
             return;
