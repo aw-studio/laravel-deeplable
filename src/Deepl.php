@@ -20,6 +20,8 @@ class Deepl
      * Create new Deepl instance.
      *
      * @param  string  $apiToken
+     * @param  string  $apiUrl
+     * @param  string  $fallbackLocale
      * @return void
      */
     public function __construct(
@@ -44,13 +46,23 @@ class Deepl
         if (! $string) {
             return '';
         }
+        if ($this->isJson($string)) {
+            return $string;
+        }
 
-        $body = [
-            'auth_key'        => $this->apiToken,
-            'text'            => strip_tags($string, '<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<p>,<br>,<div>,<span>,<strong>,<b>,<a>'),
-            'source_language' => strtoupper($sourceLanguage ?: $this->fallbackLocale),
-            'target_lang'     => strtoupper($targetLang),
-        ];
+        if (str_contains($this->apiUrl, '-free')) {
+            $string = strip_tags($string);
+        }
+
+        $body = array_merge(
+            [
+                'auth_key'        => $this->apiToken,
+                'text'            => $string,
+                'source_language' => strtoupper($sourceLanguage ?: $this->fallbackLocale),
+                'target_lang'     => strtoupper($targetLang),
+            ],
+            config('deeplable.api_params')
+        );
 
         $content = $this->apiCall('POST', 'translate', [
             'query' => $body,
@@ -78,5 +90,12 @@ class Deepl
         );
 
         return json_decode($response->getBody(), true);
+    }
+
+    public function isJson($string)
+    {
+        json_decode($string);
+
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }

@@ -36,4 +36,16 @@ return [
     'translated_models' => [
         // App\Models\Post::class,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | API-Parameters
+    |--------------------------------------------------------------------------
+    |
+    | Here you can set optional api parameters.
+    |
+    */
+    'api_params' => [
+        //'tag_handling'    => 'xml', // only available in pro version
+    ],
 ];
