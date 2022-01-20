@@ -12,9 +12,9 @@ abstract class BaseTranslator implements Translator
      * Translate the given model attribute.
      *
      * @param  Model  $model
-     * @param  string $attribute
-     * @param  string $locale
-     * @param  string $translation
+     * @param  string  $attribute
+     * @param  string  $locale
+     * @param  string  $translation
      * @return void
      */
     abstract protected function translateAttribute(Model $model, $attribute, $locale, $translation, bool $force = true);
@@ -23,7 +23,7 @@ abstract class BaseTranslator implements Translator
      * Get a list of the translated attributes of a model.
      *
      * @param  Model  $model
-     * @param  string $locale
+     * @param  string  $locale
      * @return array
      */
     abstract public function getTranslatedAttributes(Model $model, $locale);
@@ -31,7 +31,7 @@ abstract class BaseTranslator implements Translator
     /**
      * Create new Translator instance.
      *
-     * @param  Deepl $api
+     * @param  Deepl  $api
      * @return void
      */
     public function __construct(
@@ -43,13 +43,13 @@ abstract class BaseTranslator implements Translator
     /**
      * Translate all translated attributes of a model.
      *
-     * @param  Model       $model
-     * @param  array       $attributes
-     * @param  string      $targetLang
-     * @param  string|null $sourceLanguage
+     * @param  Model  $model
+     * @param  array  $attributes
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
      * @return void
      */
-    public function translate(Model $model, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
+    public function translate(Model $model, string $targetLang, string|null $sourceLanguage = null, bool $force = true)
     {
         $translatedAttributes = $this->getTranslatedAttributes($model, $sourceLanguage);
 
@@ -69,13 +69,13 @@ abstract class BaseTranslator implements Translator
     /**
      * Translate a list of attributes.
      *
-     * @param  Model       $model
-     * @param  array       $attributes
-     * @param  string      $targetLang
-     * @param  string|null $sourceLanguage
+     * @param  Model  $model
+     * @param  array  $attributes
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
      * @return void
      */
-    public function translateAttributes(Model $model, array $attributes, string $targetLang, string | null $sourceLanguage = null, bool $force = true)
+    public function translateAttributes(Model $model, array $attributes, string $targetLang, string|null $sourceLanguage = null, bool $force = true)
     {
         foreach ($attributes as $attribute) {
             $translation = $this->api->translate(

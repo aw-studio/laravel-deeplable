@@ -19,7 +19,7 @@ class Deepl
     /**
      * Create new Deepl instance.
      *
-     * @param string $apiToken
+     * @param  string  $apiToken
      * @return void
      */
     public function __construct(
@@ -33,12 +33,12 @@ class Deepl
     /**
      * Translate a string to a target language with DeepL.
      *
-     * @param  string                     $string
-     * @param  string                     $targetLang
-     * @param  string|null                $sourceLanguage
+     * @param  string  $string
+     * @param  string  $targetLang
+     * @param  string|null  $sourceLanguage
      * @return string
      */
-    public function translate(string $string, string $targetLang, string | null $sourceLanguage = null): string
+    public function translate(string $string, string $targetLang, string|null $sourceLanguage = null): string
     {
         // Avoid translating empty strings.
         if (! $string) {
@@ -64,9 +64,9 @@ class Deepl
     /**
      * Send a deepl api call.
      *
-     * @param string $method
-     * @param string $action
-     * @param array $params
+     * @param  string  $method
+     * @param  string  $action
+     * @param  array  $params
      * @return array
      */
     protected function apiCall($method, $action, $params = []): array
