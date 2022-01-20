@@ -20,7 +20,8 @@ class Deepl
      * Create new Deepl instance.
      *
      * @param string $apiToken
-     * @return void
+     * @param string $apiUrl
+     * @param string $fallbackLocale
      */
     public function __construct(
         protected string $apiToken,
@@ -33,9 +34,9 @@ class Deepl
     /**
      * Translate a string to a target language with DeepL.
      *
-     * @param  string                     $string
-     * @param  string                     $targetLang
-     * @param  string|null                $sourceLanguage
+     * @param  string      $string
+     * @param  string      $targetLang
+     * @param  string|null $sourceLanguage
      * @return string
      */
     public function translate(string $string, string $targetLang, string | null $sourceLanguage = null): string
@@ -44,13 +45,23 @@ class Deepl
         if (! $string) {
             return '';
         }
+        if ($this->isJson($string)) {
+            return $string;
+        }
 
-        $body = [
-            'auth_key'        => $this->apiToken,
-            'text'            => strip_tags($string, '<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<p>,<br>,<div>,<span>,<strong>,<b>,<a>'),
-            'source_language' => strtoupper($sourceLanguage ?: $this->fallbackLocale),
-            'target_lang'     => strtoupper($targetLang),
-        ];
+        if (str_contains($this->apiUrl, '-free')) {
+            $string = strip_tags($string);
+        }
+
+        $body = array_merge(
+            [
+                'auth_key'        => $this->apiToken,
+                'text'            => $string,
+                'source_language' => strtoupper($sourceLanguage ?: $this->fallbackLocale),
+                'target_lang'     => strtoupper($targetLang),
+            ],
+            config('deeplable.api_params')
+        );
 
         $content = $this->apiCall('POST', 'translate', [
             'query' => $body,
@@ -64,9 +75,9 @@ class Deepl
     /**
      * Send a deepl api call.
      *
-     * @param string $method
-     * @param string $action
-     * @param array $params
+     * @param  string $method
+     * @param  string $action
+     * @param  array  $params
      * @return array
      */
     protected function apiCall($method, $action, $params = []): array
@@ -78,5 +89,12 @@ class Deepl
         );
 
         return json_decode($response->getBody(), true);
+    }
+
+    public function isJson($string)
+    {
+        json_decode($string);
+
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }
