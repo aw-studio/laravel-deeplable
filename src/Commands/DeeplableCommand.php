@@ -3,6 +3,7 @@
 namespace AwStudio\Deeplable\Commands;
 
 use AwStudio\Deeplable\Facades\Translator;
+use AwStudio\Deeplable\Jobs\TranslateModelJob;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
@@ -46,6 +47,7 @@ class DeeplableCommand extends Command
     {
         return [
             ['force', null, InputOption::VALUE_NONE, 'Whether existing records are to be overwritten', null],
+            ['queue', null, InputOption::VALUE_NONE, 'Whether the job should be queued', null],
         ];
     }
 
@@ -88,15 +90,20 @@ class DeeplableCommand extends Command
     public function translateCollection(Collection $models, $locales, $fallbackLocale): void
     {
         $force = $this->hasOption('force') && $this->option('force');
+        $shouldQueue = $this->hasOption('queue') && $this->option('queue');
 
         foreach ($models as $model) {
             $translator = Translator::for($model);
 
             foreach ($locales as $locale) {
-                try {
-                    $translator->translate($model, $locale, $fallbackLocale, $force);
-                } catch (GuzzleException $e) {
-                    $this->error('Failed to translate '.get_class($model));
+                if ($shouldQueue) {
+                    TranslateModelJob::dispatch($model, $locale, $fallbackLocale, $force);
+                } else {
+                    try {
+                        $translator->translate($model, $locale, $fallbackLocale, $force);
+                    } catch (GuzzleException $e) {
+                        $this->error('Failed to translate '.get_class($model));
+                    }
                 }
             }
 

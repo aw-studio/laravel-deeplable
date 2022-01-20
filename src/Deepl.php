@@ -22,6 +22,7 @@ class Deepl
      * @param  string  $apiToken
      * @param  string  $apiUrl
      * @param  string  $fallbackLocale
+     * @return void
      */
     public function __construct(
         protected string $apiToken,
