@@ -80,9 +80,9 @@ class DeeplableCommand extends Command
     /**
      * Translate a collection of models.
      *
-     * @param  Collection $models
-     * @param  array      $locales
-     * @param  string     $fallbackLocale
+     * @param  Collection  $models
+     * @param  array  $locales
+     * @param  string  $fallbackLocale
      * @return void
      */
     public function translateCollection(Collection $models, $locales, $fallbackLocale): void

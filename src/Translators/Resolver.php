@@ -25,8 +25,8 @@ class Resolver
     /**
      * Register a translator resolver.
      *
-     * @param string $alias
-     * @param Closure $resolver
+     * @param  string  $alias
+     * @param  Closure  $resolver
      * @return void
      */
     public function register($alias, Closure $resolver)
@@ -37,7 +37,7 @@ class Resolver
     /**
      * Get a translator.
      *
-     * @param string $alias
+     * @param  string  $alias
      * @return Translator|null
      */
     public function get($alias)
@@ -56,7 +56,7 @@ class Resolver
     /**
      * Get translator for the given model.
      *
-     * @param Model $model
+     * @param  Model  $model
      * @return Translator|null
      */
     public function for(Model $model)
@@ -69,7 +69,7 @@ class Resolver
     /**
      * Set translation strategy.
      *
-     * @param Closure $closure
+     * @param  Closure  $closure
      * @return void
      */
     public function strategy(Closure $closure)
