@@ -26,7 +26,7 @@ class AstrotomicTranslator extends BaseTranslator
         }
 
         $translationModel->setAttribute($attribute, $translation);
-        
+
         $model->save();
     }
 
