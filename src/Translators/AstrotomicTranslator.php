@@ -19,15 +19,17 @@ class AstrotomicTranslator extends BaseTranslator
     protected function translateAttribute(Model $model, $attribute, $locale, $translation, bool $force = true)
     {
         $translationModel = $model->translateOrNew($locale);
-
+        
         // Ignore attribute when it has a value and it should not be overriten.
         if (! $force && $translationModel->getAttribute($attribute)) {
             return;
         }
-
+        
         $translationModel->setAttribute($attribute, $translation);
+        $translationModel->setAttribute($model->getTranslationRelationKey(), $model->getKey());
 
-        $model->save();
+        $translationModel->save();
+        $model->fresh()->update(['updated_at' => now()]);
     }
 
     /**
