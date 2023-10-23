@@ -61,6 +61,13 @@ class Resolver
      */
     public function for(Model $model)
     {
+        if($model->translator){
+            $translator = new $model->translator;
+            if($translator instanceof Translator){
+                return $translator;
+            }
+        }
+        
         return $this->get(
             call_user_func($this->strategy, $model)
         );
