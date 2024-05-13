@@ -27,6 +27,7 @@ class AstrotomicTranslatorTest extends TestCase
             'en' => ['title' => 'Hello World'],
             'de' => ['title' => 'Foo'],
         ]);
+        $post->save();
 
         $translator->translateAttributes($post, ['title'], 'de', 'en');
 
@@ -39,6 +40,7 @@ class AstrotomicTranslatorTest extends TestCase
             'en' => ['title' => 'Hello World'],
             'de' => ['title' => 'Foo'],
         ]);
+        $post->save();
 
         $translator->translate($post, 'de', 'en');
 

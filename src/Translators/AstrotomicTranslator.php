@@ -29,7 +29,7 @@ class AstrotomicTranslator extends BaseTranslator
         $translationModel->setAttribute($model->getTranslationRelationKey(), $model->getKey());
 
         $translationModel->save();
-        $model->fresh()->update(['updated_at' => now()]);
+        $model->fresh()->touch();
     }
 
     /**
